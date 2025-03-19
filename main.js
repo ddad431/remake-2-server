@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { readTokens, writeTokens } from './utils/tokens.js';
 
 const app = express();
 const port = 3000;
@@ -36,9 +37,6 @@ const users = [
     }
 ];
 
-const tokens = [
-]
-
 app.post('/auth/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -53,6 +51,7 @@ app.post('/auth/login', (req, res) => {
     const { password: _, ...userInfo } = user;
 
     // 3. 生成测试 token
+    let tokens = readTokens();
     let token = '';
     if (tokens.some(token => token.username === username)) {
         token = tokens.find(token => token.username === username).token;
@@ -60,6 +59,7 @@ app.post('/auth/login', (req, res) => {
     else {
         token = `fake-token-${username}`;
         tokens.push({ username, token });
+        writeTokens(tokens); // 保存到文件
     }
 
     // 4. 返回 token 与用户信息
@@ -140,6 +140,7 @@ const roles = [
 
 app.post('/auth/menu', (req, res) => {
     // token 验证
+    const tokens = readTokens();
     const token = req.headers?.authorization.replace('Bearer ', '');
     if (!tokens.some(t => t.token === token)) {
         return res.status(401).send('Invalid token');
