@@ -1,0 +1,71 @@
+[
+    {
+        "name": "admin",
+        "menus": [
+            {
+                "type": "menu",
+                "name": "dashboard",
+                "path": "/dashboard",
+                "component": "DashboardComponent",
+                "meta": {
+                    "title": "数据面板",
+                    "icon": "el-icon-dashboard"
+                }
+            },
+            {
+                "type": "directory",
+                "name": "system",
+                "path": "/system",
+                "component": "",
+                "meta": {
+                    "title": "系统管理",
+                    "icon": "el-icon-system"
+                },
+                "children": [
+                    {
+                        "type": "menu",
+                        "name": "user",
+                        "path": "user",
+                        "component": "SystemUserComponent",
+                        "meta": {
+                            "title": "用户管理"
+                        }
+                    },
+                    {
+                        "type": "menu",
+                        "name": "role",
+                        "path": "role",
+                        "component": "SystemRoleComponent",
+                        "meta": {
+                            "title": "角色管理"
+                        }
+                    },
+                    {
+                        "type": "menu",
+                        "name": "menu",
+                        "path": "menu",
+                        "component": "SystemMenuComponent",
+                        "meta": {
+                            "title": "菜单管理"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "user",
+        "menus": [
+            {
+                "type": "menu",
+                "name": "dashboard",
+                "path": "/dashboard",
+                "component": "DashboardComponent",
+                "meta": {
+                    "title": "数据面板",
+                    "icon": "el-icon-dashboard"
+                }
+            }
+        ]
+    }
+]
