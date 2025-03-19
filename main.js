@@ -1,10 +1,11 @@
+import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
 import { authMiddeleware } from './middlewares/index.js';
 import { useTokenService, useUserService, useRoleService } from './services/index.js'
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 // 使用 cors 中间件，用于解决跨域问题
 app.use(cors());

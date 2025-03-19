@@ -1,8 +1,8 @@
 import fs from 'fs';
 import jwt from 'jsonwebtoken'
 
-const SECRET_KEY = 'your-secret-key';
-const TOKEN_EXPIRATION = '1h';
+const SECRET_KEY = process.env.SECRET_KEY;
+const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION;
 
 function useTokenService() {
     function isValidToken(token) {
