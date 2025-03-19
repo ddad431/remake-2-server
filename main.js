@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { authMiddeleware } from './middlewares/index.js';
 import { useTokenService, useUserService, useRoleService } from './services/index.js'
 
 const app = express();
@@ -13,6 +14,8 @@ app.use(express.json());
 
 // 使用 express.static 内置中间件，用于提供静态文件
 app.use(express.static('public'));
+
+app.use(authMiddeleware);
 
 app.get("/", (_, res) => {
     res.send('Hello world!');
@@ -34,12 +37,6 @@ app.post('/auth/login', (req, res) => {
 
 app.post('/auth/menu', (req, res) => {
     const { role } = req.body;
-
-    const token = req.headers?.authorization.replace('Bearer ', '');
-    const isValidToken = useTokenService().isValidToken(token);
-    if (!isValidToken) {
-        return res.status(401).send('Invalid token');
-    }
 
     const isValidRole = useRoleService().isValidRole(role);
     if (!isValidRole) {
