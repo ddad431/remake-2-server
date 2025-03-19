@@ -1,5 +1,5 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
@@ -11,11 +11,11 @@ app.use(cors());
 app.use(express.json());
 
 // 使用 express.static 内置中间件，用于提供静态文件
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.get("/", (_, res) => {
     res.send('Hello world!');
-})
+});
 
 const users = [
     {
@@ -76,7 +76,7 @@ const roles = [
                 path: '/dashboard',
                 component: 'DashboardComponent',
                 meta: {
-                    title: 'Dashboard',
+                    title: '数据面板',
                     icon: 'el-icon-dashboard',
                 }
             },
@@ -130,7 +130,7 @@ const roles = [
                 path: '/dashboard',
                 component: 'DashboardComponent',
                 meta: {
-                    title: 'Dashboard',
+                    title: '数据面板',
                     icon: 'el-icon-dashboard',
                 }
             },
@@ -154,63 +154,6 @@ app.post('/auth/menu', (req, res) => {
     res.json(menus);
 });
 
-
 app.listen(port, () => {
     console.log(`Listening on localhost:${port}`);
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.post('/api/route', (req, res) => {
-//     const { role } = req.body;
-//     const roles = [ 'user', 'admin' ];
-
-//     if (!role || !roles.includes(role)) {
-//         return res.status(403).send(`Error query: ${role}`);
-//     }
-
-//     // component 两种方案
-//     // 1. 后端传回 component 名称，前端维护一个组件名-组件路径表
-//     // 2. 后端不传 component。前端根据 path 以及 path 相关的文件目录约定自动生成。
-//     //      - Permission/index.vue
-//     //      - Permission/User/index.vue
-//     //
-//     // [solve]
-//     //  - 第一种好一点。可能前端依赖于后端给的 component 名称，但是将来要是修
-//     //    改的话，只需要修改组件名-组件路径表中的组件名就好了。
-//     //  - 对于第二种，其严重依赖于后端给的 path 地址，假如 path 更改了，那前端还
-//     //    得改文件夹名称。对应的，你文件路径改了，那就不能用了。
-//     res.json([
-//         { id: 1, pid: 0, path: '/dashboard', name: 'Dashboard', title: 'Dashboard', component: 'DashboardComponent', },
-//         { id: 2, pid: 0, path: '/permission', name: 'Permission', title: 'Privilege', component: 'PermissionComponent', },
-//         { id: 3, pid: 2, path: 'user', name: 'UserPermission', title: 'user', component: 'UserPermissionComponent'},
-//         { id: 4, pid: 2, path: 'role', name: 'RolePermission', title: 'role', component: 'RolePermissionComponent'},
-//         { id: 5, pid: 2, path: 'menu', name: 'MenuPermission', title: 'menu', component: 'MenuPermissionComponent'},
-//     ])
-// })
-
-// app.get('/api/permission/user', (req, res) => {
-//     res.json([
-//         { id: 1, date: '2016-05-03', name: 'Aom', gender: "man", address: 'No. 189, Grove St, Los Angeles', },
-//         { id: 2, date: '2016-05-02', name: 'Aom', gender: "woman", address: 'No. 189, Grove St, Los Angeles', },
-//         { id: 3, date: '2016-05-04', name: 'Bom', gender: "man", address: 'No. 189, Grove St, Los Angeles', },
-//         { id: 4, date: '2016-05-01', name: 'Com', gender: "man", address: 'No. 189, Grove St, Los Angeles', },
-//         { id: 5, date: '2016-05-03', name: 'Dom', gender: "woman", address: 'No. 189, Grove St, Los Angeles', },
-//         { id: 6, date: '2016-05-02', name: 'Eom', gender: "man", address: 'No. 189, Grove St, Los Angeles', },
-//     ])
-// })
-//
