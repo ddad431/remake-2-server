@@ -1,40 +1,35 @@
 import fs from 'fs';
-import { readFile, writeFile, resolvePath } from '../../utils/fileHandler.js';
+import jwt from 'jsonwebtoken'
 
-const tokensFilePath = resolvePath('../data/token.json');
-
-if (!fs.existsSync(tokensFilePath)) {
-    fs.writeFileSync(tokensFilePath, JSON.stringify([]));
-}
+const SECRET_KEY = 'your-secret-key';
+const TOKEN_EXPIRATION = '1h';
 
 function useTokenService() {
     function isValidToken(token) {
-        const tokens = readFile(tokensFilePath);
-        return tokens.some(t => t.token === token);
+        try {
+            jwt.verify(token, SECRET_KEY);
+            return true;
+        }
+        catch (error) {
+            console.error('Invalid token:', error.message);
+            return false;
+        }
     }
 
     function generateToken(userInfo) {
-        const username = userInfo?.username;
-        const tokens = readFile(tokensFilePath);
-        const token = `fake-jwt-token-${username}-${Math.random().toString().slice(-2)}`;
-        const isExistToken = tokens.some(t => t.username === username);
-
-        // 如果有 token，覆盖之前的 token
-        if (isExistToken) {
-            const index = tokens.findIndex(t => t.username === username);
-            tokens[index] = { username: userInfo?.username, token };
-        }
-        else {
-            tokens.push({ username, token });
-        }
-        writeFile(tokensFilePath, tokens);
-
+        const payload = userInfo;
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKEN_EXPIRATION });
         return token;
+    }
+
+    function decodeToken(token) {
+        return jwt.decode(token);
     }
 
     return {
         isValidToken,
         generateToken,
+        decodeToken
     };
 }
 
