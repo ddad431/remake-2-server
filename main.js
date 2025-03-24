@@ -48,6 +48,38 @@ app.post('/auth/menu', (req, res) => {
     res.json(menus);
 });
 
+app.get('/permission/user', (req, res) => {
+    const data = useUserService().getUserList();
+    setTimeout(() => {
+        res.json(data);
+    })
+})
+
+app.post('/permission/user/delete', (req, res) => {
+    const { ids } = req.body;
+    const data = useUserService().deleteUser(ids);
+    setTimeout(() => {
+        res.json('delete user success.');
+    })
+})
+
+app.post('/permission/user/add', (req, res) => {
+    const { info } = req.body;
+    useUserService().addUser(info);
+    setTimeout(() => {
+        res.send('add user success.');
+    })
+})
+
+app.post('/permission/user/update', (req, res) => {
+    const { info } = req.body;
+    console.log('req body:', info);
+    useUserService().updateUserInfo(info);
+    setTimeout(() => {
+        res.send('upadte user success.');
+    })
+})
+
 app.listen(port, () => {
     console.log(`Listening on localhost:${port}`);
 })
