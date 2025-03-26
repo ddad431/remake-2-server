@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
-import { authMiddeleware } from './middlewares/index.js';
+import { authMiddeleware, delayMiddleware } from './middlewares/index.js';
 import { useTokenService, useUserService, useRoleService } from './services/index.js'
 
 const app = express();
@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use(authMiddeleware);
+app.use(delayMiddleware(500));
 
 app.get("/", (_, res) => {
     res.send('Hello world!');
@@ -50,34 +51,26 @@ app.post('/auth/menu', (req, res) => {
 
 app.get('/permission/user', (req, res) => {
     const data = useUserService().getUserList();
-    setTimeout(() => {
-        res.json(data);
-    })
+    res.json(data);
 })
 
 app.post('/permission/user/delete', (req, res) => {
     const { ids } = req.body;
     const data = useUserService().deleteUser(ids);
-    setTimeout(() => {
-        res.json('delete user success.');
-    })
+    res.json('delete user success.');
 })
 
 app.post('/permission/user/add', (req, res) => {
     const { info } = req.body;
     useUserService().addUser(info);
-    setTimeout(() => {
-        res.send('add user success.');
-    })
+    res.send('add user success.');
 })
 
 app.post('/permission/user/update', (req, res) => {
     const { info } = req.body;
     console.log('req body:', info);
     useUserService().updateUserInfo(info);
-    setTimeout(() => {
-        res.send('upadte user success.');
-    })
+    res.send('upadte user success.');
 })
 
 app.listen(port, () => {
