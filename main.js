@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
 import { authMiddeleware, delayMiddleware } from './middlewares/index.js';
-import { useTokenService, useUserService, useRoleService } from './services/index.js'
+import { useTokenService, useUserService, useRoleService, useMenuService } from './services/index.js'
 
 const app = express();
 const port = process.env.PORT;
@@ -71,6 +71,33 @@ app.post('/permission/user/update', (req, res) => {
     console.log('req body:', info);
     useUserService().updateUserInfo(info);
     res.send('upadte user success.');
+})
+
+app.get('/permission/role', (req, res) => {
+    const roleList = useRoleService().getRoleList();
+
+    res.json(roleList);
+})
+
+app.post('/permission/role/delete', (req, res) => {
+    const { ids } = req.body;
+
+    useRoleService().deleteRole(ids);
+    res.send('delete role success.');
+});
+
+app.post('/permission/role/add', (req, res) => {
+    const { info } = req.body;
+
+    useRoleService().addRole(info);
+    res.send('add role success.');
+})
+
+app.post('/permission/role/update', (req, res) => {
+    const { info } = req.body;
+
+    useRoleService().updateRole(info);
+    res.send('update role info success.');
 })
 
 app.listen(port, () => {
