@@ -33,8 +33,9 @@ function useUserService() {
         const avators = [ "/images/avator-admin.png", "/images/avator-user.png", ];
         const avator = avators[Math.round(Math.random())];
         const password = info?.username + '123';
+        const { username, ...rest } = info;
 
-        users.push({id, avator, password, ...info});
+        users.push({id, username, avator, password, ...rest});
         writeFile(usersFilePath, users);
     }
 
