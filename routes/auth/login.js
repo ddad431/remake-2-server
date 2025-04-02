@@ -20,16 +20,4 @@ loginRouter.post('/login', (req, res) => {
     res.json({ token, userInfo });
 });
 
-loginRouter.post('/menu', (req, res) => {
-    const { role } = req.body;
-
-    const isValidRole = roleService.isValidRole(role);
-    if (!isValidRole) {
-        return res.status(403).send(`Error query: ${role}`);
-    }
-
-    const menus = roleService.getRoleMenu(role);
-    res.json(menus);
-});
-
 export default loginRouter;

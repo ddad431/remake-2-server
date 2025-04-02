@@ -10,6 +10,18 @@ roleRouter.get('/role', (req, res) => {
     res.json(roleList);
 })
 
+roleRouter.post('/role/menu', (req, res) => {
+    const { role } = req.body;
+
+    const isValidRole = roleService.isValidRole(role);
+    if (!isValidRole) {
+        return res.status(403).send(`Error query: ${role}`);
+    }
+
+    const menus = roleService.getRoleMenu(role);
+    res.json(menus);
+})
+
 roleRouter.post('/role/delete', (req, res) => {
     const { ids } = req.body;
 
