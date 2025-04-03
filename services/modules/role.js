@@ -19,6 +19,13 @@ function useRoleService() {
         return menus;
     }
 
+    function getRoleButtonList(roleName) {
+        const roles = readFile(rolesFilePath);
+        const buttons = roles.find(r => r.name === roleName).buttons;
+
+        return buttons;
+    }
+
     function getRoleList() {
         const roles = readFile(rolesFilePath);
         const roleList = roles.map(({menus, ...info}) => info);
@@ -52,6 +59,7 @@ function useRoleService() {
     return {
         isValidRole,
         getRoleMenuList,
+        getRoleButtonList,
         getRoleList,
         addRole,
         deleteRole,
