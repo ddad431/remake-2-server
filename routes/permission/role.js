@@ -22,6 +22,18 @@ roleRouter.post('/role/menu', (req, res) => {
     res.json(menus);
 })
 
+roleRouter.post('/role/button', (req, res) => {
+    const { role } = req.body;
+    const isValidRole = roleService.isValidRole(role);
+
+    if (!isValidRole) {
+        return res.status(403).send(`Error query: ${role}`);
+    }
+
+    const buttons = roleService.getRoleButtonList(role);
+    res.json(buttons);
+})
+
 roleRouter.post('/role/delete', (req, res) => {
     const { ids } = req.body;
 
