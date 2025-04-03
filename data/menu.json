@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "pid": null,
+    "type": "menu",
+    "name": "dashboard",
+    "path": "/dashboard",
+    "component": "DashboardComponent",
+    "title": "数据面板",
+    "icon": "icon-dashboard"
+  },
+  {
+    "id": 2,
+    "pid": null,
+    "type": "directory",
+    "name": "system",
+    "path": "/system",
+    "component": "",
+    "title": "系统管理",
+    "icon": "icon-system",
+    "children": [
+      {
+        "id": 3,
+        "pid": 2,
+        "type": "menu",
+        "name": "user",
+        "path": "user",
+        "component": "SystemUserComponent",
+        "title": "用户管理"
+      },
+      {
+        "id": 4,
+        "pid": 2,
+        "type": "menu",
+        "name": "role",
+        "path": "role",
+        "component": "SystemRoleComponent",
+        "title": "角色管理"
+      },
+      {
+        "id": 5,
+        "pid": 2,
+        "type": "menu",
+        "name": "menu",
+        "path": "menu",
+        "component": "SystemMenuComponent",
+        "title": "菜单管理"
+      }
+    ]
+  }
+]
