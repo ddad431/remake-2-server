@@ -13,7 +13,7 @@ function useRoleService() {
         return roles.some(r => r.name === roleName);
     }
 
-    function getRoleMenu(roleName) {
+    function getRoleMenuList(roleName) {
         const roles = readFile(rolesFilePath);
         const menus = roles.find(r => r.name === roleName).menus;
         return menus;
@@ -51,7 +51,7 @@ function useRoleService() {
 
     return {
         isValidRole,
-        getRoleMenu,
+        getRoleMenuList,
         getRoleList,
         addRole,
         deleteRole,

@@ -18,7 +18,7 @@ roleRouter.post('/role/menu', (req, res) => {
         return res.status(403).send(`Error query: ${role}`);
     }
 
-    const menus = roleService.getRoleMenu(role);
+    const menus = roleService.getRoleMenuList(role);
     res.json(menus);
 })
 
