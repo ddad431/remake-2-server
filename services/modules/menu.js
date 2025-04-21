@@ -11,7 +11,7 @@ function useMenuService() {
     function getMenuList() {
         const menus = readFile(menuFilePath);
 
-        return generateTreeMenuList(menus);
+        return menus;
     }
 
     function addMenu(info) {
@@ -35,29 +35,6 @@ function useMenuService() {
 
         menus = menus.filter(v => !ids.includes(v.id));
         writeFile(menuFilePath, menus);
-    }
-
-    function generateTreeMenuList(menus) {
-        let parents = menus.filter(v => !v.pid);
-        let children = menus.filter(v => v.pid);
-
-        handle(parents, children);
-        return parents;
-
-        function handle(parents, children) {
-            parents.forEach(parent => {
-                children.forEach((child, index) => {
-                    if (child.pid === parent.id) {
-                        let _children = JSON.parse(JSON.stringify(children))
-                        _children.splice(index, 1);
-
-                        handle([child], _children);
-
-                        parent.children ? parent.children.push(child) : parent.children = [child]
-                    }
-                })
-            })
-        }
     }
 
     return {
