@@ -2,6 +2,7 @@ import fs from 'fs';
 import { readFile, writeFile, resolvePath } from '../../utils/fileHandler.js';
 
 const rolesFilePath = resolvePath('../data/role.json');
+const menusFilePath = resolvePath('../data/menu.json');
 
 if (!fs.existsSync(rolesFilePath)) {
     fs.writeFileSync(rolesFilePath, JSON.stringify([]));
@@ -15,7 +16,9 @@ function useRoleService() {
 
     function getRoleMenuList(roleName) {
         const roles = readFile(rolesFilePath);
-        const menus = roles.find(r => r.name === roleName).menus;
+        const ids = roles.find(r => r.name === roleName).menus;
+
+        const menus = readFile(menusFilePath).filter(menu => ids.includes(menu.id));
         return menus;
     }
 
