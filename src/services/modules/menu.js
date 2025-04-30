@@ -1,40 +1,59 @@
-import fs, { read } from 'fs';
-import { readFile, writeFile, resolvePath } from '../../utils/fileHandler.js';
-
-const menuFilePath = resolvePath('../data/menu.json');
-
-if (!fs.existsSync(menuFilePath)) {
-    fs.writeFileSync(menuFilePath, JSON.stringify([]));
-}
+import pool from '../../database/db.js';
 
 function useMenuService() {
-    function getMenuList() {
-        const menus = readFile(menuFilePath);
-
-        return menus;
+    async function getMenuList() {
+        const [rows] = await pool.execute(`
+            SELECT id, pid, name, type, path, component, title, icon
+            FROM menus 
+            ORDER BY id`
+        );
+        return rows;
     }
 
-    function addMenu(info) {
-        const menus = readFile(menuFilePath);
-        const id = menus[menus.length-1].id + 1;
-
-        menus.push({id, ...info});
-        writeFile(menuFilePath, menus);
+    async function addMenu(info) {
+        const [result] = await pool.execute(`
+            INSERT INTO menus (name, path, component, title, icon, type, pid)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`
+            ,
+            [
+                info.name,
+                info.path || '',
+                info.component || '',
+                info.title,
+                info.icon || '',
+                info.type,
+                info.pid,
+            ]
+        );
+        return result.insertId;
     }
 
-    function updateMenu(info) {
-        const menus = readFile(menuFilePath);
-        const index = menus.findIndex(menu => menu.id === info.id)
-
-        menus[index] = info;
-        writeFile(menuFilePath, menus);
+    async function deleteMenu(ids) {
+        await pool.execute(`
+            DELETE FROM menus 
+            WHERE id IN (${ids.map(() => '?').join(',')})`
+            ,
+            ids
+        );
     }
 
-    function deleteMenu(ids) {
-        let menus = readFile(menuFilePath);
-
-        menus = menus.filter(v => !ids.includes(v.id));
-        writeFile(menuFilePath, menus);
+    async function updateMenu(info) {
+        await pool.execute(`
+            UPDATE menus
+            SET name = ?, path = ?, component = ?, title = ?, icon = ?, type = ?, pid = ?
+            WHERE id = ?`
+            ,
+            [
+                info.name,
+                info.path || '',
+                info.component || '',
+                info.title,
+                info.icon || '',
+                info.type,
+                info.pid,
+                info.id
+            ]
+        );
     }
 
     return {
@@ -42,8 +61,7 @@ function useMenuService() {
         addMenu,
         deleteMenu,
         updateMenu,
-    }
+    };
 }
 
 export default useMenuService;
-

@@ -4,55 +4,87 @@ import { useRoleService } from '../../services/index.js';
 const roleRouter = Router();
 const roleService = useRoleService();
 
-roleRouter.get('/role', (req, res) => {
-    const roleList = roleService.getRoleList();
-
-    res.json(roleList);
-})
-
-roleRouter.post('/role/menu', (req, res) => {
-    const { role } = req.body;
-
-    const isValidRole = roleService.isValidRole(role);
-    if (!isValidRole) {
-        return res.status(403).send(`Error query: ${role}`);
+roleRouter.get('/role', async (req, res) => {
+    try {
+        const roleList = await roleService.getRoleList();
+        res.json(roleList);
     }
-
-    const menus = roleService.getRoleMenuList(role);
-    res.json(menus);
-})
-
-roleRouter.post('/role/button', (req, res) => {
-    const { role } = req.body;
-    const isValidRole = roleService.isValidRole(role);
-
-    if (!isValidRole) {
-        return res.status(403).send(`Error query: ${role}`);
+    catch (error) {
+        console.error('Get role list error:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-
-    const buttons = roleService.getRoleButtonList(role);
-    res.json(buttons);
-})
-
-roleRouter.post('/role/delete', (req, res) => {
-    const { ids } = req.body;
-
-    roleService.deleteRole(ids);
-    res.send('delete role success.');
 });
 
-roleRouter.post('/role/add', (req, res) => {
-    const { info } = req.body;
+roleRouter.post('/role/menu', async (req, res) => {
+    try {
+        const { role } = req.body;
+        const isValidRole = await roleService.isValidRole(role);
 
-    roleService.addRole(info);
-    res.send('add role success.');
-})
+        if (!isValidRole) {
+            return res.status(403).json({ message: `Invalid role: ${role}` });
+        }
 
-roleRouter.post('/role/update', (req, res) => {
-    const { info } = req.body;
+        const menus = await roleService.getRoleMenuList(role);
+        res.json(menus);
+    }
+    catch (error) {
+        console.error('Get role menu error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
-    roleService.updateRole(info);
-    res.send('update role info success.');
-})
+roleRouter.post('/role/button', async (req, res) => {
+    try {
+        const { role } = req.body;
+        const isValidRole = await roleService.isValidRole(role);
+
+        if (!isValidRole) {
+            return res.status(403).json({ message: `Invalid role: ${role}` });
+        }
+
+        const buttons = await roleService.getRoleButtonList(role);
+        res.json(buttons);
+    }
+    catch (error) {
+        console.error('Get role button error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+roleRouter.post('/role/delete', async (req, res) => {
+    try {
+        const { ids } = req.body;
+        await roleService.deleteRole(ids);
+        res.json({ message: 'Delete role success' });
+    }
+    catch (error) {
+        console.error('Delete role error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+roleRouter.post('/role/add', async (req, res) => {
+    try {
+        const { info } = req.body;
+        await roleService.addRole(info);
+        res.json({ message: 'Add role success' });
+    }
+    catch (error) {
+        console.error('Add role error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+roleRouter.post('/role/update', async (req, res) => {
+    try {
+        const { info } = req.body;
+        await roleService.updateRole(info);
+        res.json({ message: 'Update role success' });
+    }
+    catch (error) {
+        console.error('Update role error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 export default roleRouter;
