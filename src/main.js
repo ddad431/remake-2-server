@@ -1,8 +1,8 @@
 import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
-import { authMiddeleware, delayMiddleware } from './src/middlewares/index.js';
-import router from './src/routes/index.js';
+import { authMiddeleware, delayMiddleware } from './middlewares/index.js';
+import router from './routes/index.js';
 
 const app = express();
 const port = process.env.PORT;
